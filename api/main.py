@@ -14,11 +14,11 @@ async def lifespan(app: FastAPI):
 
 app: FastAPI = FastAPI(
     lifespan=lifespan,
-    title="Hello World API", 
+    title="Todo fastAPI", 
     version="0.0.1",
     servers=[
         {
-            "url": "http://0.0.0.0:8000", # ADD NGROK URL Here Before Creating GPT Action
+            "url": "http://127.0.0.1:8000", # ADD NGROK URL Here Before Creating GPT Action
             "description": "Development Server"
         }
     ])
