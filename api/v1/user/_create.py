@@ -3,6 +3,7 @@ from _database import startSession
 from models._user_model import User
 from typing import Annotated
 from sqlmodel import Session
+from utils._utils import hash_password
 
 session = startSession()
 signup_route = APIRouter()
@@ -16,7 +17,7 @@ signup_route = APIRouter()
 #     return user
 
 @signup_route.port("/signup", response_model=User)
-def create_user(user:User, session: Annotated[Session, Depends(startSession)]):
+async def create_user(user:User, session: Annotated[Session, Depends(startSession)]):
     try:
        existedUser = session.get({"email":user.email})
        if existedUser is not None:
@@ -25,6 +26,8 @@ def create_user(user:User, session: Annotated[Session, Depends(startSession)]):
                 detail="User with this email already exist"
             )
        else:
+           hashedPassword = hash_password(user.password)
+           user.password = hashedPassword
            session.add(user) 
            session.commit()
            session.refresh(user)
