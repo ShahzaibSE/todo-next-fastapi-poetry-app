@@ -8,3 +8,9 @@ class User(SQLModel, table=True):
     lastname:Optional[str] = None
     email:str
     password:str
+    
+class Token(SQLModel):
+    access_token: str
+    token_type: str
+    # expires_in: int
+    refresh_token: str
