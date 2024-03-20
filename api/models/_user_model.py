@@ -14,3 +14,8 @@ class Token(SQLModel):
     token_type: str
     # expires_in: int
     refresh_token: str
+    
+class UserResponse(SQLModel):
+    status:int
+    message:str
+    data:User

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, Response, HTTPException, status
 from api._database import startSession
-from api.models._user_model import User
-from typing import Annotated
-from sqlmodel import Session
+from api.models._user_model import User, UserResponse
+from typing import Annotated, Union
+from sqlmodel import Session, select
 from api.utils._utils import hash_password
 
 session = startSession()
@@ -16,21 +16,28 @@ signup_route = APIRouter()
 #     session.refresh(user)
 #     return user
 
-@signup_route.post("/signup", response_model=User)
+@signup_route.post("/signup", response_model=UserResponse)
 async def create_user(user:User, session: Annotated[Session, Depends(startSession)]):
     try:
-       existedUser = session.get({"email":user.email})
-       if existedUser is not None:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="User with this email already exist"
-            )
+       print("Creating new user")
+       existedUser:User = session.exec(select(User).filter(User.email == user.email)).first()
+       print(existedUser)
+       if existedUser:
+            return {
+                "status":status.HTTP_202_ACCEPTED,
+                "message":"User already exist",
+                "data":existedUser
+            }
        else:
            hashedPassword = hash_password(user.password)
            user.password = hashedPassword
            session.add(user) 
            session.commit()
            session.refresh(user)
-           return user 
+           return {
+               "status":status.HTTP_201_CREATED,
+               "message":"User Signed Up Successfully",
+               "data":user
+               } 
     except:
         return Response(status_code=500, content="Couldn't create user successfully")
