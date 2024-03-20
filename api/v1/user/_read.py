@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from utils._utils import create_access_token_jwt
+from api.utils._utils import create_access_token_jwt
 
 userReadRoute = APIRouter()
 

@@ -1,8 +1,8 @@
-import _settings
+import api._settings
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from _settings import DATABASE_URL
+from api._settings import DATABASE_URL
 
 connection_string = str(DATABASE_URL).replace("postgresql", "postgresql+psycopg")
 

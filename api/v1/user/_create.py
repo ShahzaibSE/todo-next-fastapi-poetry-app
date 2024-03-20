@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, Response, HTTPException, status
-from _database import startSession
-from models._user_model import User
+from api._database import startSession
+from api.models._user_model import User
 from typing import Annotated
 from sqlmodel import Session
-from utils._utils import hash_password
+from api.utils._utils import hash_password
 
 session = startSession()
 signup_route = APIRouter()
@@ -16,7 +16,7 @@ signup_route = APIRouter()
 #     session.refresh(user)
 #     return user
 
-@signup_route.port("/signup", response_model=User)
+@signup_route.post("/signup", response_model=User)
 async def create_user(user:User, session: Annotated[Session, Depends(startSession)]):
     try:
        existedUser = session.get({"email":user.email})

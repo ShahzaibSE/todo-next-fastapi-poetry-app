@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from _database import create_db_and_tables
-from v1.user._user import userRouter
+from api._database import create_db_and_tables
+from api.v1.user._user import userRouter
 
 # The first part of the function, before the yield, will
 # be executed before the application starts.
