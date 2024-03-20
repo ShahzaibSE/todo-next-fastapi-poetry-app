@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Response, HTTPException, status
 from api._database import startSession
 from api.models._user_model import Token, User
 from fastapi.security import OAuth2PasswordRequestForm
-from utils._service import authenticate_user
+from api.utils._service import authenticate_user
 from typing import Annotated
 from datetime import timedelta
 from api.utils._utils import ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_MINUTES, create_access_token_jwt, create_refresh_token_jwt
