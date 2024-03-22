@@ -20,7 +20,8 @@ signup_route = APIRouter()
 async def create_user(user:User, session: Annotated[Session, Depends(startSession)]):
     try:
        print("Creating new user")
-       existedUser:User = session.exec(select(User).filter(User.email == user.email)).first()
+       print(user)
+       existedUser:User = session.exec(select(User).filter(User.username == user.username)).first()
        print(existedUser)
        if existedUser:
             return {

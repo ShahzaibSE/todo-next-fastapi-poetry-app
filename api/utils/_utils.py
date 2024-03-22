@@ -25,6 +25,7 @@ def verify_password(password:str, hashed_password:str)->bool:
 
 def create_access_token_jwt(subject:Union[str,Any], expires_delta:str)->str:
     try:
+        print("Creating access token")
         if expires_delta is not None:
             expires_delta = datetime.now(timezone.utc) + expires_delta
         else:
@@ -41,6 +42,7 @@ def create_access_token_jwt(subject:Union[str,Any], expires_delta:str)->str:
 
 def create_refresh_token_jwt(subject:Union[str,Any], expires_delta:str)->str:
     try:
+        print("Create Refresh Token")
         if expires_delta is not None:
             expires_delta = datetime.now(timezone.utc) + expires_delta
         else:

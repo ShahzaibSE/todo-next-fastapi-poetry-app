@@ -11,6 +11,8 @@ outh2_password = OAuth2PasswordBearer(tokenUrl="token")
 
 async def authenticate_user(username:str, password:str, session: Annotated[Session, Depends(startSession)])->bool:
     user:User = session.exec(select(User).filter([User.firstname == username, User.password == password])).first()
+    print("Existing user found to login")
+    print(user)
     if not user:
         return False
     if not verify_password(password, user.password):
