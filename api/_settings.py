@@ -7,7 +7,7 @@ _ = load_dotenv(find_dotenv())
 
 try:
     config = Config(".env")
-    print(".Env file is in the path")
+    # print(".Env file is in the path")
 except FileNotFoundError:
     config = Config()
     
