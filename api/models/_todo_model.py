@@ -6,3 +6,8 @@ class Todo(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None)
     content: str = Field(index=True)
     user_id = Field(foreign_key=User.id, index=True)
+
+class ToDoResponse(SQLModel):
+    status:int
+    message:str
+    todo:Todo

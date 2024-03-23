@@ -20,6 +20,12 @@ JWT_SECRET_KEY = os.environ['JWT_SECRET_KEY']   # should be kept secret
 JWT_REFRESH_SECRET_KEY = os.environ['JWT_REFRESH_SECRET_KEY']    # should be kept secret
 SECRET_KEY = "090e3ba2a1d93d843715cb8cec50e1730e20991c62b04e7e249ef9b378d1490c"
 
+credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid Refresh Token",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
 
 def hash_password(password:str)->str:
     return password_context.hash(password)
@@ -67,4 +73,10 @@ def validate_refresh_token(token:str, session:Annotated[Session, Depends(startSe
     if user is None:
         raise credentials_exception
     return user
+
+def token_service():
+    try:
+        pass
+    except:
+        pass
     
