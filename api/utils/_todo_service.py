@@ -4,6 +4,7 @@ from typing import Annotated
 from fastapi import Depends
 from api.models._todo_model import Todo
 from fastapi import status, HTTPException
+from api.models._todo_model import ToDoResponse
 
 def getToDos(session:Annotated[Session,Depends(startSession)]):
     try:
@@ -15,19 +16,27 @@ def getToDos(session:Annotated[Session,Depends(startSession)]):
             detail="Couldn't get all todos"
         )
         
-async def addToDo(todo:Todo,session:Annotated[Session,Depends(startSession)]):
+async def addToDo(todo:Todo,session:Annotated[Session,Depends(startSession)])->ToDoResponse:
     try:
         existingTodo = await session.exec(select(Todo).filter(Todo.content==todo.content)).first()
         if not existingTodo:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Todo not found")
         elif existingTodo:
-            return existingTodo
+            return ToDoResponse(
+                status=status.HTTP_202_ACCEPTED,
+                message="Todo already exists",
+                data=existingTodo
+            )
         else:
             todo.content = str.lower(todo.content)
             session.add(todo)
             session.commit()
             session.refresh()
-            return todo
+            return ToDoResponse(
+                status=status.HTTP_201_CREATED,
+                message="Todo created successfully",
+                data=todo
+            )
         
     except:
         raise HTTPException(
