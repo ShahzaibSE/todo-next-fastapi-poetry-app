@@ -10,4 +10,4 @@ class Todo(SQLModel, table=True):
 class ToDoResponse(SQLModel):
     status:int
     message:str
-    todo:Todo
+    data:Todo=None

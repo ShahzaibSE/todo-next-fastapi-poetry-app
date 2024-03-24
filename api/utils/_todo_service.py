@@ -9,11 +9,15 @@ from api.models._todo_model import ToDoResponse
 def getToDos(session:Annotated[Session,Depends(startSession)]):
     try:
         todos = session.exce(select(Todo))
-        return todos
+        return ToDoResponse(
+            status=status.HTTP_200_OK,
+            message="Todo list fetched successfully",
+            data=todos
+        )
     except:
-        raise HTTPException(
+        raise ToDoResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Couldn't get all todos"
+            message="Couldn't fetch list of todos"
         )
         
 async def addToDo(todo:Todo,session:Annotated[Session,Depends(startSession)])->ToDoResponse:
@@ -39,12 +43,12 @@ async def addToDo(todo:Todo,session:Annotated[Session,Depends(startSession)])->T
             )
         
     except:
-        raise HTTPException(
+        return ToDoResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Couldn't create a new todo"
+            message="Couldn't create a new todo"
         )
         
-async def deleteToDo(todo:Todo, session:Annotated[Session,Depends(startSession)]):
+async def deleteToDo(todo:Todo, session:Annotated[Session,Depends(startSession)])->ToDoResponse:
     try:
         existingTodo = await session.exec(select(Todo).filter(Todo.id == todo.id)).first()
         if not existingTodo:
@@ -52,12 +56,15 @@ async def deleteToDo(todo:Todo, session:Annotated[Session,Depends(startSession)]
         session.exec(delete(existingTodo))
         session.commit()
         session.close()
-        return {
-            "status":status.HTTP_202_ACCEPTED,
-            "message":"Todo deleted successfully"
-        }
+        return ToDoResponse(
+            status=status.HTTP_200_OK,
+            message="Todo deleted successfully"
+        )
     except:
-        pass
+        return ToDoResponse(
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            message="Couldn't delete todo successfully"
+        )
     
 async def updateToDo(todo:Todo, session:Annotated[Session,Depends(startSession)]):
     try:
