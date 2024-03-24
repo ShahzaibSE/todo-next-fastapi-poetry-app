@@ -14,10 +14,11 @@ async def delete_todo(todo:Todo):
                 detail="Couldn't delete todo successfully"
             )
         elif(todo_to_delete):
-            return Response(
-                status_code=todo_to_delete.status,
-                content=todo_to_delete.message
-            )
+            return {
+                "status":todo_to_delete.status,
+                "message":todo_to_delete.message,
+                "data":todo_to_delete.data
+            }
         # todo_to_delete = 
     except:
         return Response(status_code=todo_to_delete.status,

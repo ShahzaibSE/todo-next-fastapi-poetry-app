@@ -58,7 +58,8 @@ async def deleteToDo(todo:Todo, session:Annotated[Session,Depends(startSession)]
         session.close()
         return ToDoResponse(
             status=status.HTTP_200_OK,
-            message="Todo deleted successfully"
+            message="Todo deleted successfully",
+            data=existingTodo
         )
     except:
         return ToDoResponse(
@@ -77,4 +78,7 @@ async def updateToDo(todo:Todo, session:Annotated[Session,Depends(startSession)]
         session.close()
         return todo
     except:
-        pass
+        return ToDoResponse(
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            message="Couldn't update todo successfully"
+        )
